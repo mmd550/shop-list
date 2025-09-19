@@ -10,6 +10,7 @@ import { ProgressbarProvider } from '@/components/layout/progressbar-provider'
 import { MuiThemeProvider } from '@/setup/theme/mui/mui'
 import { LayoutClient } from '@/components/layout/layout.client'
 import { fontsClassName } from './fonts/fonts'
+import { QueryProvider } from '@/setup/api/query-client-provider'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -37,15 +38,17 @@ export default async function RootLayout({
     <html lang="en">
       <body dir={direction} className={fontsClassName}>
         <NextIntlClientProvider>
-          <AppRouterCacheProvider>
-            <MuiThemeProvider>
-              <ProgressbarProvider>
-                <LayoutClient userAgent={userAgent || ''}>
-                  {children}
-                </LayoutClient>
-              </ProgressbarProvider>
-            </MuiThemeProvider>
-          </AppRouterCacheProvider>
+          <QueryProvider>
+            <AppRouterCacheProvider>
+              <MuiThemeProvider>
+                <ProgressbarProvider>
+                  <LayoutClient userAgent={userAgent || ''}>
+                    {children}
+                  </LayoutClient>
+                </ProgressbarProvider>
+              </MuiThemeProvider>
+            </AppRouterCacheProvider>
+          </QueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>
