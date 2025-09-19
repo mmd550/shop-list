@@ -2,18 +2,20 @@
 
 import { useState } from 'react'
 import { Button, Typography, Alert } from '@mui/material'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useInfiniteStores } from '@/services/store/use-stores'
-import { useCategories } from '@/services/categories/use-categories'
 import { ShopCard, ShopCardSkeleton } from './shop-card'
 import { FiltersBar } from './filters-bar'
 import { classed } from '@/utils/classed'
-import { toLocale } from '@/utils/text'
 import { SortBy } from '@/services/store/types'
+import { Category } from '@/services/categories/get-categories'
 
-export const Shops = () => {
+interface ShopsProps {
+  categories: Category[]
+}
+
+export const Shops = ({ categories }: ShopsProps) => {
   const t = useTranslations('shops')
-  const locale = useLocale()
 
   const [filters, setFilters] = useState<{
     name: string
@@ -38,8 +40,6 @@ export const Shops = () => {
     isError,
   } = useInfiniteStores(10, filters)
 
-  const { data: categoriesData, isLoading: categoriesLoading } = useCategories()
-
   if (isError) {
     return (
       <Container>
@@ -51,8 +51,6 @@ export const Shops = () => {
   }
 
   const allShops = data?.pages.flatMap(page => page.data) || []
-  const totalShops = data?.pages[0]?.pagination.total
-  const categories = categoriesData?.data || []
 
   return (
     <Container>
@@ -60,16 +58,9 @@ export const Shops = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           {t('title')}
         </Typography>
-        {!!totalShops && (
-          <Typography variant="body1" color="text.secondary">
-            {t('shopsCount', { count: toLocale(totalShops, locale) })}
-          </Typography>
-        )}
       </Header>
 
-      {!categoriesLoading && (
-        <FiltersBar categories={categories} onFiltersChange={setFilters} />
-      )}
+      <FiltersBar categories={categories} onFiltersChange={setFilters} />
 
       <ShopsGrid>
         {isLoading
@@ -97,7 +88,7 @@ export const Shops = () => {
 
 const Container = classed('div')('my-8')
 
-const Header = classed('div')('mb-8 constrain')
+const Header = classed('div')('constrain')
 
 const ShopsGrid = classed('div')(
   'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-8 mb-8 justify-items-center constrain',

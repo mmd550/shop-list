@@ -4,7 +4,7 @@ import { StoreFilters, StoresResponse } from './types'
 const fetchStoressWithFilters = async (
   page: number,
   limit: number = 10,
-  filters: ShopFilters = {
+  filters: StoreFilters = {
     name: '',
     categoryId: null,
     sortBy: {

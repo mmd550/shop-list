@@ -22,7 +22,7 @@ export const ShopCard = ({ shop }: ShopCardProps) => {
   const locale = useLocale()
 
   return (
-    <Link href={`${locale}/store/${shop.id}`} className="h-full w-full">
+    <Link href={`${locale}/store/${shop.id}`} className="h-full w-full max-w-[420px]">
       <StyledCard>
         <AspectRatio ratio={(300 / 400).toFixed(2)}>
           <ImageWithSkeleton
@@ -69,7 +69,6 @@ export const ShopCard = ({ shop }: ShopCardProps) => {
 const StyledCard = styled(Card)`
   height: 100%;
   width: 100%;
-  max-width: 420px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
