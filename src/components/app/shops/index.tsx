@@ -32,15 +32,17 @@ export const Shops = () => {
   }
 
   const allShops = data?.pages.flatMap(page => page.data) || []
+
+  const totalShops = data?.pages[0]?.pagination.total
   return (
     <Container>
       <Header>
         <Typography variant="h4" component="h1" gutterBottom>
           {t('title')}
         </Typography>
-        {Boolean(allShops?.length) && (
+        {!!totalShops && (
           <Typography variant="body1" color="text.secondary">
-            {t('shopsCount', { count: toLocale(allShops.length, locale) })}
+            {t('shopsCount', { count: toLocale(totalShops, locale) })}
           </Typography>
         )}
       </Header>
