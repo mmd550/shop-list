@@ -8,7 +8,7 @@ import { ShopCard, ShopCardSkeleton } from './shop-card'
 import { FiltersBar } from './filters-bar'
 import { classed } from '@/utils/classed'
 import { SortBy } from '@/services/store/types'
-import { Category } from '@/services/categories/get-categories'
+import { Category } from '@/app/api/categories/get-categories'
 
 interface ShopsProps {
   categories: Category[]

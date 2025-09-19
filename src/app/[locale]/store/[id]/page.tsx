@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { StoreDetailsHeader } from './components/store-details-header'
 import { StoreDetailsInfo } from './components/store-details-info'
 import { StoreProductsSection } from './components/store-products-section'
+import { getStore } from '@/app/api/stores/[id]/get-store'
+import { unstable_cache } from 'next/cache'
 
 interface StoreDetailsPageProps {
   params: Promise<{ id: string; locale: string }>
@@ -12,7 +14,12 @@ export default async function StoreDetailsPage({
 }: StoreDetailsPageProps) {
   const { id } = await params
 
-  const storeData = await getStoreData(id)
+  const cachedGetStore = unstable_cache(() => getStore(id), ['store', id], {
+    tags: ['store'],
+    revalidate: 60 * 60 * 6, // 6 hours
+  })
+
+  const storeData = await cachedGetStore()
 
   if (!storeData) {
     notFound()
@@ -22,11 +29,11 @@ export default async function StoreDetailsPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="tablet:px-6 desktop:px-8 mx-auto max-w-7xl px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 tablet:px-6 desktop:px-8">
         {/* Store Header */}
         <StoreDetailsHeader shop={shop} />
 
-        <div className="desktop:grid-cols-3 mt-8 grid grid-cols-1 gap-8">
+        <div className="mt-8 grid grid-cols-1 gap-8 desktop:grid-cols-3">
           {/* Store Information */}
           <div className="desktop:col-span-1">
             <StoreDetailsInfo shop={shop} />
@@ -44,28 +51,4 @@ export default async function StoreDetailsPage({
       </div>
     </div>
   )
-}
-
-async function getStoreData(id: string) {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/stores/${id}`,
-      {
-        cache: 'no-store',
-      },
-    )
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null
-      }
-      throw new Error('Failed to fetch store data')
-    }
-
-    const data = await response.json()
-    return data.data
-  } catch (error) {
-    console.error('Error fetching store data:', error)
-    throw error
-  }
 }
