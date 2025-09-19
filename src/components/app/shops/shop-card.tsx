@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { styled } from '@mui/material/styles'
 import { Card, CardContent, Typography, Rating, Skeleton } from '@mui/material'
-import { Shop } from '@/hooks/use-shops-infinite'
+import { Store } from '@/services/store/types'
 import { classed } from '@/utils/classed'
 import { AspectRatio } from '@/components/shared/aspect-ratio'
 import { ImageWithSkeleton } from '@/components/shared/image-with-skeleton'
@@ -11,7 +11,7 @@ import { toLocale } from '@/utils/text'
 import { useLocale } from 'next-intl'
 
 interface ShopCardProps {
-  shop: Shop
+  shop: Store
 }
 
 interface ShopCardSkeletonProps {

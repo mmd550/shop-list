@@ -4,7 +4,19 @@
     "shopsCount": "{count} فروشگاه موجود است",
     "loadingError": "خطا در بارگذاری فروشگاه‌ها: {error}",
     "loadingMore": "در حال بارگذاری...",
-    "loadMore": "بارگذاری بیشتر"
+    "loadMore": "بارگذاری بیشتر",
+    "filters": {
+      "searchPlaceholder": "جستجو در نام فروشگاه...",
+      "category": "دسته‌بندی",
+      "allCategories": "همه دسته‌ها",
+      "sortBy": "مرتب‌سازی",
+      "default": "پیش‌فرض",
+      "ratingAsc": "کمترین امتیاز",
+      "ratingDesc": "بیشترین امتیاز",
+      "sortOrder": "ترتیب",
+      "ascending": "صعودی",
+      "descending": "نزولی"
+    }
   },
   "storeDetails": {
     "title": "جزئیات فروشگاه",

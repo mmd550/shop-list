@@ -1,14 +1,33 @@
 'use client'
 
+import { useState } from 'react'
 import { Button, Typography, Alert } from '@mui/material'
 import { useLocale, useTranslations } from 'next-intl'
-import { useShopsInfinite } from '@/hooks/use-shops-infinite'
+import { useInfiniteStores } from '@/services/store/use-stores'
+import { useCategories } from '@/services/categories/use-categories'
 import { ShopCard, ShopCardSkeleton } from './shop-card'
+import { FiltersBar } from './filters-bar'
 import { classed } from '@/utils/classed'
 import { toLocale } from '@/utils/text'
+import { SortBy } from '@/services/store/types'
 
 export const Shops = () => {
   const t = useTranslations('shops')
+  const locale = useLocale()
+
+  const [filters, setFilters] = useState<{
+    name: string
+    categoryId: number | null
+    sortBy: SortBy
+  }>({
+    name: '',
+    categoryId: null as number | null,
+    sortBy: {
+      property: 'default',
+      order: 'desc',
+    },
+  })
+
   const {
     data,
     error,
@@ -17,9 +36,9 @@ export const Shops = () => {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useShopsInfinite(10)
+  } = useInfiniteStores(10, filters)
 
-  const locale = useLocale()
+  const { data: categoriesData, isLoading: categoriesLoading } = useCategories()
 
   if (isError) {
     return (
@@ -32,8 +51,9 @@ export const Shops = () => {
   }
 
   const allShops = data?.pages.flatMap(page => page.data) || []
-
   const totalShops = data?.pages[0]?.pagination.total
+  const categories = categoriesData?.data || []
+
   return (
     <Container>
       <Header>
@@ -46,6 +66,10 @@ export const Shops = () => {
           </Typography>
         )}
       </Header>
+
+      {!categoriesLoading && (
+        <FiltersBar categories={categories} onFiltersChange={setFilters} />
+      )}
 
       <ShopsGrid>
         {isLoading
@@ -71,12 +95,12 @@ export const Shops = () => {
   )
 }
 
-const Container = classed('div')('constrain my-8')
+const Container = classed('div')('my-8')
 
-const Header = classed('div')('mb-8')
+const Header = classed('div')('mb-8 constrain')
 
 const ShopsGrid = classed('div')(
-  'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-8 mb-8 justify-items-center',
+  'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-8 mb-8 justify-items-center constrain',
 )
 
 const LoadMoreContainer = classed('div')('flex justify-center mt-8')

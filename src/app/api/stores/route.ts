@@ -6,11 +6,14 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     await asyncDelay(2000)
-    
+
     // Get query parameters
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
     const categoryId = searchParams.get('category_id')
+    const name = searchParams.get('name')
+    const sortBy = searchParams.get('sort_by') || 'default'
+    const sortOrder = searchParams.get('sort_order') || 'desc'
 
     // Validate pagination parameters
     if (page < 1 || limit < 1 || limit > 100) {
@@ -35,9 +38,25 @@ export async function GET(req: NextRequest) {
         )
       }
 
-      filteredShops = data.stores.filter(
+      filteredShops = filteredShops.filter(
         shop => shop.category_id === categoryIdNum,
       )
+    }
+
+    // Filter shops by name if name is provided
+    if (name) {
+      filteredShops = filteredShops.filter(shop =>
+        shop.name.toLowerCase().includes(name.toLowerCase()),
+      )
+    }
+
+    // Sort shops
+    if (sortBy === 'rating') {
+      if (sortOrder === 'asc') {
+        filteredShops = filteredShops.sort((a, b) => a.rating - b.rating)
+      } else {
+        filteredShops = filteredShops.sort((a, b) => b.rating - a.rating)
+      }
     }
 
     // Calculate pagination
