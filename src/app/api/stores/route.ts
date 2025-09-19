@@ -5,8 +5,8 @@ import { asyncDelay } from '@/utils/async-delay'
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    console.log('REQUEST SERVER SIDE')
     await asyncDelay(2000)
+    
     // Get query parameters
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')

@@ -32,7 +32,7 @@ const fetchShops = async (
   page: number,
   limit: number = 10,
 ): Promise<ShopsResponse> => {
-  const response = await fetch(`/api/shops?page=${page}&limit=${limit}`)
+  const response = await fetch(`/api/stores?page=${page}&limit=${limit}`)
   if (!response.ok) {
     throw new Error('Failed to fetch shops')
   }

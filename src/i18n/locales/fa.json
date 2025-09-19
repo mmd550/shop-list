@@ -5,5 +5,21 @@
     "loadingError": "خطا در بارگذاری فروشگاه‌ها: {error}",
     "loadingMore": "در حال بارگذاری...",
     "loadMore": "بارگذاری بیشتر"
+  },
+  "storeDetails": {
+    "title": "جزئیات فروشگاه",
+    "storeInfo": "اطلاعات فروشگاه",
+    "description": "توضیحات",
+    "address": "آدرس",
+    "phone": "تلفن",
+    "products": "محصولات",
+    "productsCount": "{count} محصول موجود است",
+    "noProducts": "محصولی یافت نشد",
+    "noProductsDescription": "در حال حاضر محصولی در این فروشگاه موجود نیست.",
+    "sales": "فروش",
+    "currency": "تومان",
+    "notFound": "فروشگاه یافت نشد",
+    "notFoundDescription": "متأسفانه فروشگاهی با این شناسه یافت نشد.",
+    "backToHome": "بازگشت به صفحه اصلی"
   }
 }

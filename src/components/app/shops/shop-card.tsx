@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { styled } from '@mui/material/styles'
 import { Card, CardContent, Typography, Rating, Skeleton } from '@mui/material'
 import { Shop } from '@/hooks/use-shops-infinite'
@@ -19,46 +20,49 @@ interface ShopCardSkeletonProps {
 
 export const ShopCard = ({ shop }: ShopCardProps) => {
   const locale = useLocale()
+
   return (
-    <StyledCard>
-      <AspectRatio ratio={(300 / 400).toFixed(2)}>
-        <ImageWithSkeleton
-          imageProps={{
-            src: shop.imageUrl,
-            alt: shop.imageUrl,
-            width: 400,
-            height: 300,
-            className: 'h-full w-full object-cover',
-          }}
-          className="h-full w-full"
-        />
-      </AspectRatio>
-      <StyledCardContent>
-        <div>
-          <Typography variant="h6" className="mb-1 font-semibold">
-            {shop.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {shop.category?.name_fa}
-          </Typography>
-        </div>
+    <Link href={`${locale}/store/${shop.id}`} className="h-full w-full">
+      <StyledCard>
+        <AspectRatio ratio={(300 / 400).toFixed(2)}>
+          <ImageWithSkeleton
+            imageProps={{
+              src: shop.imageUrl,
+              alt: shop.imageUrl,
+              width: 400,
+              height: 300,
+              className: 'h-full w-full object-cover',
+            }}
+            className="h-full w-full"
+          />
+        </AspectRatio>
+        <StyledCardContent>
+          <div>
+            <Typography variant="h6" className="mb-1 font-semibold">
+              {shop.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {shop.category?.name_fa}
+            </Typography>
+          </div>
 
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          className="line-clamp-2 clamped"
-        >
-          {shop.description}
-        </Typography>
-
-        <RatingContainer className="mt-auto">
-          <Rating value={shop.rating} precision={0.1} readOnly size="small" />
-          <Typography variant="body2" color="text.secondary">
-            ({toLocale(shop.rating, locale)})
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            className="line-clamp-2 clamped"
+          >
+            {shop.description}
           </Typography>
-        </RatingContainer>
-      </StyledCardContent>
-    </StyledCard>
+
+          <RatingContainer className="mt-auto">
+            <Rating value={shop.rating} precision={0.1} readOnly size="small" />
+            <Typography variant="body2" color="text.secondary">
+              ({toLocale(shop.rating, locale)})
+            </Typography>
+          </RatingContainer>
+        </StyledCardContent>
+      </StyledCard>
+    </Link>
   )
 }
 
