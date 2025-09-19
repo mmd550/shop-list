@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@bprogress/next": "^3.2.12",
     "@bprogress/react": "^1.2.7",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",

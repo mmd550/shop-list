@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Rating } from '@mui/material'
 import { toLocale } from '@/utils/text'
 import { getLocale } from 'next-intl/server'
+import { BackButton } from './back-button'
 
 interface Shop {
   id: string
@@ -23,7 +24,7 @@ export const StoreDetailsHeader = async ({ shop }: StoreDetailsHeaderProps) => {
   const locale = await getLocale()
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-sm">
-      <div className="relative h-64 tablet:h-80">
+      <div className="relative h-64 tablet:h-80 desktop:h-64">
         <Image
           src={shop.imageUrl}
           alt={shop.name}
@@ -32,6 +33,7 @@ export const StoreDetailsHeader = async ({ shop }: StoreDetailsHeaderProps) => {
           priority
         />
         <div className="absolute inset-0 bg-black bg-opacity-20" />
+        <BackButton />
       </div>
 
       <div className="p-6">
