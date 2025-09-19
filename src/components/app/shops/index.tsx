@@ -1,11 +1,14 @@
 'use client'
 
-import { Button, CircularProgress, Typography, Alert } from '@mui/material'
+import { Button, Typography, Alert } from '@mui/material'
+import { useLocale, useTranslations } from 'next-intl'
 import { useShopsInfinite } from '@/hooks/use-shops-infinite'
-import { ShopCard } from './shop-card'
+import { ShopCard, ShopCardSkeleton } from './shop-card'
 import { classed } from '@/utils/classed'
+import { toLocale } from '@/utils/text'
 
 export const Shops = () => {
+  const t = useTranslations('shops')
   const {
     data,
     error,
@@ -16,41 +19,38 @@ export const Shops = () => {
     isError,
   } = useShopsInfinite(10)
 
-  if (isLoading) {
-    return (
-      <LoadingContainer>
-        <CircularProgress />
-      </LoadingContainer>
-    )
-  }
+  const locale = useLocale()
 
   if (isError) {
     return (
       <Container>
         <Alert severity="error">
-          خطا در بارگذاری فروشگاه‌ها: {error?.message}
+          {t('loadingError', { error: error?.message })}
         </Alert>
       </Container>
     )
   }
 
   const allShops = data?.pages.flatMap(page => page.data) || []
-
   return (
     <Container>
       <Header>
         <Typography variant="h4" component="h1" gutterBottom>
-          فروشگاه‌ها
+          {t('title')}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          {allShops.length} فروشگاه موجود است
-        </Typography>
+        {Boolean(allShops?.length) && (
+          <Typography variant="body1" color="text.secondary">
+            {t('shopsCount', { count: toLocale(allShops.length, locale) })}
+          </Typography>
+        )}
       </Header>
 
       <ShopsGrid>
-        {allShops.map(shop => (
-          <ShopCard key={shop.id} shop={shop} />
-        ))}
+        {isLoading
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <ShopCardSkeleton key={index} />
+            ))
+          : allShops.map(shop => <ShopCard key={shop.id} shop={shop} />)}
       </ShopsGrid>
 
       {hasNextPage && (
@@ -59,11 +59,9 @@ export const Shops = () => {
             variant="contained"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            startIcon={
-              isFetchingNextPage ? <CircularProgress size={20} /> : null
-            }
+            loading={isFetchingNextPage}
           >
-            {isFetchingNextPage ? 'در حال بارگذاری...' : 'بارگذاری بیشتر'}
+            {t('loadMore')}
           </Button>
         </LoadMoreContainer>
       )}
@@ -71,14 +69,12 @@ export const Shops = () => {
   )
 }
 
-const Container = classed('div')('constrain')
+const Container = classed('div')('constrain my-8')
 
-const Header = classed('div')('mb-8 text-center')
+const Header = classed('div')('mb-8')
 
 const ShopsGrid = classed('div')(
-  'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-8 mb-8',
+  'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-8 mb-8 justify-items-center',
 )
 
 const LoadMoreContainer = classed('div')('flex justify-center mt-8')
-
-const LoadingContainer = classed('div')('flex justify-center items-center p-8')

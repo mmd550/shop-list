@@ -1,16 +1,72 @@
+'use client'
+
 import { styled } from '@mui/material/styles'
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Chip,
-  Rating,
-} from '@mui/material'
+import { Card, CardContent, Typography, Rating, Skeleton } from '@mui/material'
 import { Shop } from '@/hooks/use-shops-infinite'
+import { classed } from '@/utils/classed'
+import { AspectRatio } from '@/components/shared/aspect-ratio'
+import { ImageWithSkeleton } from '@/components/shared/image-with-skeleton'
+import { toLocale } from '@/utils/text'
+import { useLocale } from 'next-intl'
+
+interface ShopCardProps {
+  shop: Shop
+}
+
+interface ShopCardSkeletonProps {
+  className?: string
+}
+
+export const ShopCard = ({ shop }: ShopCardProps) => {
+  const locale = useLocale()
+  return (
+    <StyledCard>
+      <AspectRatio ratio={(300 / 400).toFixed(2)}>
+        <ImageWithSkeleton
+          imageProps={{
+            src: shop.imageUrl,
+            alt: shop.imageUrl,
+            width: 400,
+            height: 300,
+            className: 'h-full w-full object-cover',
+          }}
+          className="h-full w-full"
+        />
+      </AspectRatio>
+      <StyledCardContent>
+        <div>
+          <Typography variant="h6" className="mb-1 font-semibold">
+            {shop.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {shop.category?.name_fa}
+          </Typography>
+        </div>
+
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          className="line-clamp-2 clamped"
+        >
+          {shop.description}
+        </Typography>
+
+        <RatingContainer className="mt-auto">
+          <Rating value={shop.rating} precision={0.1} readOnly size="small" />
+          <Typography variant="body2" color="text.secondary">
+            ({toLocale(shop.rating, locale)})
+          </Typography>
+        </RatingContainer>
+      </StyledCardContent>
+    </StyledCard>
+  )
+}
 
 const StyledCard = styled(Card)`
   height: 100%;
+  width: 100%;
+  max-width: 420px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   transition:
@@ -23,80 +79,66 @@ const StyledCard = styled(Card)`
   }
 `
 
-const StyledCardMedia = styled(CardMedia)`
-  height: 200px;
-  object-fit: cover;
-`
+const StyledCardContent = classed(CardContent)('flex flex-col gap-5 flex-grow')
 
-const StyledCardContent = styled(CardContent)`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`
+const RatingContainer = classed('div')(
+  'flex dir-ltr justify-start rtl:flex-row-reverse w-full gap-2 mt-2',
+)
 
-const ShopName = styled(Typography)`
-  font-weight: 600;
-  margin-bottom: 4px;
-`
-
-const Description = styled(Typography)`
-  color: ${({ theme }) => theme.palette.text.secondary};
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex-grow: 1;
-`
-
-const Address = styled(Typography)`
-  color: ${({ theme }) => theme.palette.text.secondary};
-  font-size: 0.875rem;
-`
-
-const Phone = styled(Typography)`
-  color: ${({ theme }) => theme.palette.text.secondary};
-  font-size: 0.875rem;
-`
-
-const RatingContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-`
-
-interface ShopCardProps {
-  shop: Shop
-}
-
-export const ShopCard = ({ shop }: ShopCardProps) => {
+export const ShopCardSkeleton = ({ className }: ShopCardSkeletonProps) => {
   return (
-    <StyledCard>
-      <StyledCardMedia image={shop.imageUrl} title={shop.name} />
+    <StyledCard className={className}>
+      <AspectRatio ratio={(300 / 400).toFixed(2)}>
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height="100%"
+          animation="wave"
+          sx={{ bgcolor: 'grey.100' }}
+        />
+      </AspectRatio>
       <StyledCardContent>
-        <ShopName variant="h6">{shop.name}</ShopName>
-
-        {shop.category && (
-          <Chip
-            label={shop.category.name_fa}
-            size="small"
-            color="primary"
-            variant="outlined"
+        <div>
+          <Skeleton
+            variant="text"
+            className="[&&]:h-[28px] [&&]:w-[70%]"
+            animation="wave"
+            sx={{ bgcolor: 'grey.100' }}
           />
-        )}
+          <Skeleton
+            variant="text"
+            className="[&&]:h-[20px] [&&]:w-[30%]"
+            animation="wave"
+            sx={{ bgcolor: 'grey.100' }}
+          />
+        </div>
 
-        <Description variant="body2">{shop.description}</Description>
+        <Skeleton
+          variant="text"
+          className="[&&]:h-[20px] [&&]:w-full"
+          animation="wave"
+          sx={{ bgcolor: 'grey.100' }}
+        />
+        <Skeleton
+          variant="text"
+          className="[&&]:h-[20px] [&&]:w-[90%]"
+          animation="wave"
+          sx={{ bgcolor: 'grey.100' }}
+        />
 
-        <Address variant="body2">📍 {shop.address}</Address>
-
-        <Phone variant="body2">📞 {shop.phone}</Phone>
-
-        <RatingContainer>
-          <Rating value={shop.rating} precision={0.1} readOnly size="small" />
-          <Typography variant="body2" color="text.secondary">
-            ({shop.rating})
-          </Typography>
+        <RatingContainer className="mt-auto">
+          <Skeleton
+            variant="rectangular"
+            className="[&&]:h-[20px] [&&]:w-[120px]"
+            animation="wave"
+            sx={{ bgcolor: 'grey.100' }}
+          />
+          <Skeleton
+            variant="text"
+            className="[&&]:h-[20px] [&&]:w-[40px]"
+            animation="wave"
+            sx={{ bgcolor: 'grey.100' }}
+          />
         </RatingContainer>
       </StyledCardContent>
     </StyledCard>
