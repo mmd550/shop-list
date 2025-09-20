@@ -9,11 +9,10 @@ import {
   MenuItem,
   SelectChangeEvent,
   styled,
-  Button,
   Popover,
   IconButton,
-  Typography,
 } from '@mui/material'
+import { useDebounce } from 'use-debounce'
 import { FilterList, Close } from '@mui/icons-material'
 import { useTranslations } from 'next-intl'
 import { classed } from '@/utils/classed'
@@ -58,6 +57,9 @@ export const FiltersBar = ({
   const t = useTranslations('shops.filters')
   const isTabletOrAbove = useIsTabletOrAboveSize()
   const [name, setName] = useState('')
+
+  const [debouncedName] = useDebounce(name, 500)
+
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [sortBy, setSortBy] = useState<keyof typeof sortByOptions>('default')
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -66,12 +68,12 @@ export const FiltersBar = ({
 
   useEffect(() => {
     onFiltersChange({
-      name,
+      name: debouncedName,
       categoryId,
       sortBy: sortByOptions[sortBy]!,
       sortOrder: 'desc',
     })
-  }, [name, categoryId, sortBy, onFiltersChange])
+  }, [debouncedName, categoryId, sortBy, onFiltersChange])
 
   const handleCategoryChange = (event: SelectChangeEvent<number>) => {
     const value = event.target.value
