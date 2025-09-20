@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { StoreDetailsHeader } from './components/store-details-header'
-import { StoreDetailsInfo } from './components/store-details-info'
-import { StoreProductsSection } from './components/store-products-section'
+import { StoreDetailsHeader } from '../../../../components/app/store-details/store-details-header'
+import { StoreDetailsInfo } from '../../../../components/app/store-details/store-details-info'
+import { StoreProductsSection } from '../../../../components/app/store-details/store-products-section'
 import { getStore } from '@/app/api/stores/[id]/get-store'
 import { unstable_cache } from 'next/cache'
 
