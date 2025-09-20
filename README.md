@@ -59,9 +59,9 @@ yarn dev
 
 - **Tailwind CSS v3**: Selected over v4 because v4 doesn't yet support IntelliSense for project custom components and utilities, which is essential for developer experience and maintainability.
 
-## 🌐 Online Demo
+## 🌐 Online Demo 
 
-[View Live Demo](https://shop-list-demo.vercel.app) _(Mock link - will be updated with actual deployment URL)_
+[View Live Demo](https://shop-list-hazel.vercel.app/)
 
 ## 🏗️ Important Architectural & Design Decisions
 
