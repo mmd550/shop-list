@@ -58,7 +58,7 @@ export const FiltersBar = ({
   const isTabletOrAbove = useIsTabletOrAboveSize()
   const [name, setName] = useState('')
 
-  const [debouncedName] = useDebounce(name, 500)
+  const [debouncedName] = useDebounce(name, 200)
 
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [sortBy, setSortBy] = useState<keyof typeof sortByOptions>('default')
